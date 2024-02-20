@@ -7,6 +7,9 @@ export default async function middleware(req: NextRequest) {
       analytics.track('pageview', {
         page: '/',
         country: req.geo?.country,
+      }),
+      analytics.track('export', {
+        page: '/analytics',
       })
     } catch (err) {
       // fail silently to not affect request
@@ -18,5 +21,7 @@ export default async function middleware(req: NextRequest) {
 }
 
 export const matcher = {
-  matcher: ['/'],
+  matcher: [
+
+  '/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }

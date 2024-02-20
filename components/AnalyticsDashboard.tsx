@@ -6,6 +6,9 @@ import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'lucide-react'
 import ReactCountryFlag from 'react-country-flag'
 
 interface AnalyticsDashboardProps {
+    avgExportsPerDay: string
+    amtExportsToday: number
+
   avgVisitorsPerDay: string
   amtVisitorsToday: number
   timeseriesPageviews: Awaited<ReturnType<typeof analytics.retrieveDays>>
@@ -41,6 +44,9 @@ const Badge = ({ percentage }: { percentage: number }) => {
 }
 
 const AnalyticsDashboard = ({
+    avgExportsPerDay,
+    amtExportsToday,
+
   avgVisitorsPerDay,
   amtVisitorsToday,
   timeseriesPageviews,
@@ -57,12 +63,34 @@ const AnalyticsDashboard = ({
             {avgVisitorsPerDay}
           </p>
         </Card>
+        
         <Card className='w-full'>
           <p className='flex gap-2.5 items-center text-tremor-default text-dark-tremor-content'>
             Visitors today
             <Badge
               percentage={
                 (amtVisitorsToday / Number(avgVisitorsPerDay) - 1) * 100
+              }
+            />
+          </p>
+          <p className='text-3xl text-dark-tremor-content-strong font-semibold'>
+            {amtVisitorsToday}
+          </p>
+        </Card>
+        <Card className='w-full'>
+          <p className='text-tremor-default text-dark-tremor-content'>
+            Avg. exports/day
+          </p>
+          <p className='text-3xl text-dark-tremor-content-strong font-semibold'>
+            {avgExportsPerDay}
+          </p>
+        </Card>
+        <Card className='w-full'>
+          <p className='flex gap-2.5 items-center text-tremor-default text-dark-tremor-content'>
+            Exports today
+            <Badge
+              percentage={
+                (amtExportsToday / Number(avgExportsPerDay) - 1) * 100
               }
             />
           </p>

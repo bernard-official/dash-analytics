@@ -6,6 +6,17 @@ const Page = async () => {
   const TRACKING_DAYS = 7
 
   const pageviews = await analytics.retrieveDays('pageview', TRACKING_DAYS)
+  const exportviews = await analytics.retrieveDays('export', TRACKING_DAYS)
+
+
+  const totalexportviews = exportviews.reduce((acc, curr) => {
+    return (
+      acc +
+      curr.events.reduce((acc, curr) => {
+        return acc + Object.values(curr)[0]!
+      }, 0)
+    )
+  }, 0)
 
   const totalPageviews = pageviews.reduce((acc, curr) => {
     return (
@@ -16,8 +27,17 @@ const Page = async () => {
     )
   }, 0)
 
+  const avgExportsPerDay = (totalexportviews / TRACKING_DAYS).toFixed(1)
   const avgVisitorsPerDay = (totalPageviews / TRACKING_DAYS).toFixed(1)
 
+  const amtExportsToday = exportviews
+    .filter((ev) => ev.date === getDate())
+    .reduce((acc, curr) => {
+      return (
+        acc +
+        curr.events.reduce((acc, curr) => acc + Object.values(curr)[0]!, 0)
+      )
+    }, 0)
   const amtVisitorsToday = pageviews
     .filter((ev) => ev.date === getDate())
     .reduce((acc, curr) => {
@@ -67,6 +87,9 @@ const Page = async () => {
           amtVisitorsToday={amtVisitorsToday}
           timeseriesPageviews={pageviews}
           topCountries={topCountries}
+
+          avgExportsPerDay={avgExportsPerDay}
+          amtExportsToday = {amtExportsToday}
         />
       </div>
     </div>
